@@ -23,7 +23,8 @@ import https.apis_uv_mx.gadgets.FindGadgetByIdRequest;
 import https.apis_uv_mx.gadgets.FindGadgetByIdResponse;
 import https.apis_uv_mx.gadgets.UpdateGadgetRequest;
 import https.apis_uv_mx.gadgets.UpdateGadgetResponse;
-import https.apis_uv_mx.gadgets.FindAllGadgetResponse.Data;
+import https.apis_uv_mx.gadgets.FindAllGadgetByDataResponse.AllByData;
+import https.apis_uv_mx.gadgets.FindAllGadgetResponse.AllData;
 
 @Endpoint
 public class GadgetEndpoint implements IGadgetEndpoint {
@@ -97,36 +98,36 @@ public class GadgetEndpoint implements IGadgetEndpoint {
 
         try {
             Optional<Gadget> search = gadgetRepository.findById(request.getId());
-    
+
             if (search.isPresent()) {
                 Gadget gadget = search.get();
-    
+
                 if (!request.getData().getName().isEmpty()) {
                     gadget.setName(request.getData().getName());
                 }
-    
+
                 if (!request.getData().getBrand().isEmpty()) {
                     gadget.setBrand(request.getData().getBrand());
                 }
-    
+
                 if (!request.getData().getModel().isEmpty()) {
                     gadget.setModel(request.getData().getModel());
                 }
-    
+
                 if (!request.getData().getPlatform().isEmpty()) {
                     gadget.setPlatform(request.getData().getPlatform());
                 }
-    
+
                 if (request.getData().getPrice() != gadget.getPrice()) {
                     gadget.setPrice(request.getData().getPrice());
                 }
-    
+
                 if (!request.getData().getType().isEmpty()) {
                     gadget.setType(request.getData().getType());
                 }
 
                 gadgetRepository.save(gadget);
-    
+
                 response.setCode(200);
                 response.setMessage("OK");
 
@@ -138,7 +139,7 @@ public class GadgetEndpoint implements IGadgetEndpoint {
 
             System.out.println("Error de API. Id nulo");
             ex.printStackTrace();
-            
+
             return response;
         }
 
@@ -157,14 +158,14 @@ public class GadgetEndpoint implements IGadgetEndpoint {
         try {
             Optional<Gadget> search = gadgetRepository.findById(request.getId());
 
-            if(search.isPresent()){
+            if (search.isPresent()) {
                 Gadget gadget = search.get();
-                response.getData().setId(gadget.getId());
-                response.getData().setBrand(gadget.getBrand());
-                response.getData().setModel(gadget.getModel());
-                response.getData().setPlatform(gadget.getPlatform());
-                response.getData().setPrice(gadget.getPrice());
-                response.getData().setType(gadget.getType());
+                response.getAllById().setId(gadget.getId());
+                response.getAllById().setBrand(gadget.getBrand());
+                response.getAllById().setModel(gadget.getModel());
+                response.getAllById().setPlatform(gadget.getPlatform());
+                response.getAllById().setPrice(gadget.getPrice());
+                response.getAllById().setType(gadget.getType());
 
                 response.setCode(200);
                 response.setMessage("OK");
@@ -177,7 +178,7 @@ public class GadgetEndpoint implements IGadgetEndpoint {
 
             System.out.println("Error de API. Id nulo");
             ex.printStackTrace();
-            
+
             return response;
         }
 
@@ -187,20 +188,19 @@ public class GadgetEndpoint implements IGadgetEndpoint {
     @Override
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "FindAllGadgetByDataRequest")
     @ResponsePayload
-    public FindAllGadgetByDataResponse findGadgetByData(FindAllGadgetByDataRequest request) {
-        throw new UnsupportedOperationException("Unimplemented method 'findGadgetByData'");
-    }
+    public FindAllGadgetByDataResponse findGadgetByData(@RequestPayload FindAllGadgetByDataRequest request) {
+        FindAllGadgetByDataResponse response = new FindAllGadgetByDataResponse();
 
-    @Override
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "FindGadgetByIdRequest")
-    @ResponsePayload
-    public FindAllGadgetResponse findAllGadget() {
-        FindAllGadgetResponse response = new FindAllGadgetResponse();
+        Iterable<Gadget> search = gadgetRepository.findByNameOrBrandOrModelOrPlatformOrPriceOrType(
+                request.getData().getName(),
+                request.getData().getBrand(),
+                request.getData().getModel(),
+                request.getData().getPlatform(),
+                request.getData().getPrice(),
+                request.getData().getType());
 
-        Iterable<Gadget> gadgets = gadgetRepository.findAll();
-
-        for (Gadget gadget : gadgets) {
-            Data data = new Data();
+        for(Gadget gadget : search) {
+            AllByData data = new AllByData();
 
             data.setId(gadget.getId());
             data.setName(gadget.getName());
@@ -210,12 +210,40 @@ public class GadgetEndpoint implements IGadgetEndpoint {
             data.setPrice(gadget.getPrice());
             data.setType(gadget.getType());
 
-            response.getData().add(data);
+            response.getAllByData().add(data);
         }
-        
+
         response.setCode(200);
         response.setMessage("OK");
-        
+
+        return response;
+    }
+
+    @Override
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "FindAllGadgetRequest")
+    @ResponsePayload
+    public FindAllGadgetResponse findAllGadget() {
+        FindAllGadgetResponse response = new FindAllGadgetResponse();
+
+        Iterable<Gadget> gadgets = gadgetRepository.findAll();
+
+        for (Gadget gadget : gadgets) {
+            AllData data = new AllData();
+
+            data.setId(gadget.getId());
+            data.setName(gadget.getName());
+            data.setBrand(gadget.getBrand());
+            data.setModel(gadget.getModel());
+            data.setPlatform(gadget.getPlatform());
+            data.setPrice(gadget.getPrice());
+            data.setType(gadget.getType());
+
+            response.getAllData().add(data);
+        }
+
+        response.setCode(200);
+        response.setMessage("OK");
+
         return response;
     }
 }

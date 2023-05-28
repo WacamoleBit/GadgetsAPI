@@ -16,24 +16,25 @@ import org.springframework.xml.xsd.XsdSchema;
 @Configuration
 public class ServiceConfiguration extends WsConfigurerAdapter {
     @Bean
-    public XsdSchema gadgetSchema(){
+    public XsdSchema gadgetSchema() {
         return new SimpleXsdSchema(new ClassPathResource("schema.xsd"));
     }
-    
+
     @Bean
-	public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
-		MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-		servlet.setApplicationContext(applicationContext);
-		servlet.setTransformWsdlLocations(true);
-		return new ServletRegistrationBean<>(servlet, "/api/*");
-	}
+    public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(
+            ApplicationContext applicationContext) {
+        MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+        servlet.setApplicationContext(applicationContext);
+        servlet.setTransformWsdlLocations(true);
+        return new ServletRegistrationBean<>(servlet, "/api/*");
+    }
 
     @Bean(name = "gadgets")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema gadgetSchema) {
         DefaultWsdl11Definition wsdl = new DefaultWsdl11Definition();
-        wsdl.setPortTypeName("gadgetsPort");        
-        wsdl.setLocationUri("/api");   
-        wsdl.setTargetNamespace("https://apis.uv.mx/gadgets");        
+        wsdl.setPortTypeName("gadgetsPort");
+        wsdl.setLocationUri("/api");
+        wsdl.setTargetNamespace("https://apis.uv.mx/gadgets");
         wsdl.setSchema(gadgetSchema);
         return wsdl;
     }

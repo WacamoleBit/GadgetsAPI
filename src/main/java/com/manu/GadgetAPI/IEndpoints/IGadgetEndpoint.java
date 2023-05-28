@@ -14,9 +14,14 @@ import https.apis_uv_mx.gadgets.UpdateGadgetResponse;
 
 public interface IGadgetEndpoint {
     public CreateGadgetResponse createGadget(CreateGadgetRequest request);
+
     public DeleteGadgetResponse deleteGadget(DeleteGadgetRequest request);
+
     public UpdateGadgetResponse updateGadget(UpdateGadgetRequest request);
+
     public FindGadgetByIdResponse findGadgetById(FindGadgetByIdRequest request);
+
     public FindAllGadgetByDataResponse findGadgetByData(FindAllGadgetByDataRequest request);
+
     public FindAllGadgetResponse findAllGadget();
 }

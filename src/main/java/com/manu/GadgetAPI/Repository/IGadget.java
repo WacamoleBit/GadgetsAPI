@@ -1,16 +1,29 @@
 package com.manu.GadgetAPI.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
 import com.manu.GadgetAPI.Models.Gadget;
 
 public interface IGadget extends CrudRepository<Gadget, Integer> {
-    List<Gadget> findByName(String name);
-    List<Gadget> findByBrand(String brand);
-    List<Gadget> findByModel(String model);
-    List<Gadget> findByPlatform(String platform);
-    List<Gadget> findByPrice(String price);
-    List<Gadget> findByType(String type);
+    Iterable<Gadget> findByNameOrBrandOrModelOrPlatformOrPriceOrType(
+            String name,
+            String brand,
+            String model,
+            String platform,
+            double price,
+            String type);
+
+    Optional<Gadget> findByName(String name);
+
+    Optional<Gadget> findByBrand(String brand);
+
+    Optional<Gadget> findByModel(String model);
+
+    Optional<Gadget> findByPlatform(String platform);
+
+    Optional<Gadget> findByPrice(double price);
+
+    Optional<Gadget> findByType(String type);
 }
