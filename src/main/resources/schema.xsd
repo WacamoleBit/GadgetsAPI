@@ -78,6 +78,7 @@
         <xs:element name="data">
           <xs:complexType>
             <xs:sequence>
+              <xs:element name="id" type="xs:int" />
               <xs:element name="name" type="xs:string" />
               <xs:element name="brand" type="xs:string" />
               <xs:element name="model" type="xs:string" />
@@ -90,7 +91,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="FindGadgetByDataRequest">
+  <xs:element name="FindAllGadgetByDataRequest">
     <xs:complexType>
       <xs:sequence>
         <xs:element name="data">
@@ -108,14 +109,37 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="FindGadgetByDataResponse">
+  <xs:element name="FindAllGadgetByDataResponse">
     <xs:complexType>
       <xs:sequence>
         <xs:element name="code" type="xs:int" />
         <xs:element name="message" type="xs:string" />
-        <xs:element name="data">
+        <xs:element maxOccurs="unbounded" name="data">
           <xs:complexType>
             <xs:sequence>
+              <xs:element name="id" type="xs:int" />
+              <xs:element name="name" type="xs:string" />
+              <xs:element name="brand" type="xs:string" />
+              <xs:element name="model" type="xs:string" />
+              <xs:element name="platform" type="xs:string" />
+              <xs:element name="price" type="xs:double" />
+              <xs:element name="type" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FindAllGadgetRequest" />
+  <xs:element name="FindAllGadgetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="code" type="xs:int" />
+        <xs:element name="message" type="xs:string" />
+        <xs:element maxOccurs="unbounded" name="data">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="id" type="xs:int" />
               <xs:element name="name" type="xs:string" />
               <xs:element name="brand" type="xs:string" />
               <xs:element name="model" type="xs:string" />

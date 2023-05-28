@@ -21,12 +21,12 @@ public class ServiceConfiguration extends WsConfigurerAdapter {
     }
     
     @Bean
-    public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
-        MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-        servlet.setApplicationContext(applicationContext);        
-        servlet.setTransformWsdlLocations(true);
-        return new ServletRegistrationBean<>(servlet, "/api/*");
-    }
+	public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
+		MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+		servlet.setApplicationContext(applicationContext);
+		servlet.setTransformWsdlLocations(true);
+		return new ServletRegistrationBean<>(servlet, "/api/*");
+	}
 
     @Bean(name = "gadgets")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema gadgetSchema) {
